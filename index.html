@@ -9,9 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Assistant', sans-serif;
-            scroll-behavior: smooth;
         }
         body.overflow-hidden {
             overflow: hidden;
@@ -34,28 +36,6 @@
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
         }
-        .ghost-button:hover {
-            background-color: white;
-            color: #0A1128;
-        }
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 201, 167, 0.1), 0 10px 10px -5px rgba(0, 201, 167, 0.08);
-        }
-        .testimonial-slide {
-            display: none;
-        }
-        .testimonial-slide.active {
-            display: block;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .logo-scroller .logos {
-            display: flex;
-            animation: scroll 30s linear infinite;
-        }
         #mobile-menu {
             transition: transform 0.3s ease-in-out;
             transform: translateX(100%);
@@ -72,34 +52,107 @@
             opacity: 1;
             transform: translateY(0);
         }
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.5rem;
+            transition: border-color 0.3s ease;
+            background-color: white;
+        }
+        .form-label {
+            position: absolute;
+            top: 0.85rem;
+            right: 1rem;
+            color: #A0AEC0;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            background-color: white;
+            padding: 0 0.25rem;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #00C9A7;
+        }
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label {
+            top: -0.75rem;
+            right: 0.75rem;
+            font-size: 0.875rem;
+            color: #00C9A7;
+        }
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 280px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            padding: 2rem;
+        }
+        .flip-card-back {
+            background-color: #0A1128;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #cookie-consent-banner {
+            transition: transform 0.5s ease-in-out;
+        }
+        #cookie-consent-banner.show {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-white text-gray-800">
 
+    <!-- Mobile Menu -->
     <div id="mobile-menu" class="fixed inset-0 bg-slate-900 z-[100] p-8 pt-24 text-white text-center">
         <button id="mobile-menu-close-button" class="absolute top-6 left-6 text-4xl text-white">&times;</button>
         <div class="flex flex-col space-y-8 text-2xl font-bold">
-            <a href="services.html" class="hover:text-turquoise-bg transition">שירותים</a>
-            <a href="solutions.html" class="hover:text-turquoise-bg transition">פתרונות</a>
-            <a href="about.html" class="hover:text-turquoise-bg transition">אודות</a>
-            <a href="knowledge-hub.html" class="hover:text-turquoise-bg transition">מגזין</a>
-            <a href="contact.html" class="mt-8 inline-block px-8 py-3 turquoise-bg text-white rounded-lg">צרו קשר</a>
+            <a href="#services" class="nav-link hover:text-turquoise-bg transition">שירותים</a>
+            <a href="#about" class="nav-link hover:text-turquoise-bg transition">אודות</a>
+            <a href="#contact" class="nav-link hover:text-turquoise-bg transition">צרו קשר</a>
         </div>
     </div>
     
-    <header id="main-header" class="bg-white sticky top-0 z-50">
+    <!-- Header -->
+    <header id="main-header" class="sticky top-0 z-50 transition-all duration-300">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="index.html" class="font-bold text-2xl navy-text font-rubik">SHARON360</a>
+            <a href="#home" class="font-bold text-2xl navy-text font-rubik">SHARON360</a>
             
             <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-                <a href="services.html" class="text-gray-600 hover:text-turquoise-bg font-semibold">שירותים</a>
-                <a href="solutions.html" class="text-gray-600 hover:text-turquoise-bg font-semibold">פתרונות</a>
-                <a href="about.html" class="text-gray-600 hover:text-turquoise-bg font-semibold">אודות</a>
-                <a href="knowledge-hub.html" class="text-gray-600 hover:text-turquoise-bg font-semibold">מגזין</a>
+                <a href="#services" class="text-gray-600 hover:text-turquoise-bg font-semibold">שירותים</a>
+                <a href="#about" class="text-gray-600 hover:text-turquoise-bg font-semibold">אודות</a>
+                <a href="#contact" class="text-gray-600 hover:text-turquoise-bg font-semibold">צרו קשר</a>
             </div>
 
             <div class="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
-                 <a href="contact.html" class="text-navy-bg font-semibold hover:text-turquoise-bg transition">צרו קשר למכירות</a>
+                 <a href="#contact" class="text-navy-bg font-semibold hover:text-turquoise-bg transition">צרו קשר למכירות</a>
                  <a href="#" class="px-5 py-2 turquoise-bg text-white font-bold rounded-md shadow-sm hover:bg-opacity-90 transition">הירשמו עכשיו</a>
             </div>
 
@@ -109,165 +162,157 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero-bg text-white">
+        <section id="home" class="hero-bg text-white">
             <div class="container mx-auto px-6 py-24 md:py-32 text-center">
                 <h1 class="text-4xl md:text-6xl font-extrabold font-rubik leading-tight">הופכים אתגרים טכנולוגיים<br>להזדמנות עסקית.</h1>
-                <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">אנו מספקים פתרונות CIO & DPO as a Service, אבטחת מידע ותקשורת מתקדמים לארגונים מובילים.</p>
+                <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">אנו מספקים פתרונות טכנולוגיים מתקדמים, ייעוץ אסטרטגי ותמיכה מקיפה לארגונים מובילים.</p>
                 <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <a href="services.html" class="px-8 py-4 turquoise-bg text-white font-bold rounded-lg shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 w-full sm:w-auto">גלו את השירותים שלנו</a>
-                    <a href="contact.html" class="ghost-button px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg transition-all duration-300 w-full sm:w-auto">קבעו פגישת ייעוץ</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Social Proof Section -->
-        <section class="py-12 bg-white animate-on-scroll">
-            <div class="container mx-auto px-6 text-center">
-                <h3 class="text-gray-500 font-semibold mb-8">נותנים בנו אמון ארגונים מובילים</h3>
-                <div class="logo-scroller relative w-full overflow-hidden">
-                    <div class="logos">
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 1</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 2</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 3</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 4</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 5</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 6</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 1</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 2</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 3</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 4</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 5</span></div>
-                        <div class="flex-shrink-0 w-40 mx-8 flex items-center justify-center"><span class="text-2xl text-gray-400">לוגו 6</span></div>
-                    </div>
+                    <a href="#services" class="px-8 py-4 turquoise-bg text-white font-bold rounded-lg shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 w-full sm:w-auto">גלו את השירותים שלנו</a>
                 </div>
             </div>
         </section>
 
         <!-- Core Services Section -->
-        <section class="py-16 md:py-24 light-gray-bg">
+        <section id="services" class="py-16 md:py-24 light-gray-bg">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold navy-text mb-12 animate-on-scroll">פתרונות IT מהשורה הראשונה – מותאמים לצרכים שלכם</h2>
+                <h2 class="text-3xl md:text-4xl font-bold navy-text mb-12 animate-on-scroll">פתרונות 360° לעסק שלכם</h2>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="card-hover bg-white p-8 rounded-xl shadow-lg transition-all duration-300 text-right animate-on-scroll">
-                        <div class="text-4xl turquoise-text mb-4">🛡️</div>
-                        <h3 class="text-2xl font-bold navy-text mb-2">CIO as a Service</h3>
-                        <p class="text-gray-600 mb-4">מנהיגות טכנולוגית אסטרטגית לקבלת החלטות עסקיות חכמות יותר.</p>
-                        <a href="service-cio.html" class="font-bold turquoise-text hover:underline">קראו עוד ←</a>
+                    <div class="flip-card animate-on-scroll">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white text-right">
+                                <div class="text-4xl turquoise-text mb-4">🛡️</div>
+                                <h3 class="text-2xl font-bold navy-text mb-2">ייעוץ אסטרטגי (CIO/CTO)</h3>
+                                <p class="text-gray-600">מנהיגות טכנולוגית בכירה לקבלת החלטות עסקיות חכמות יותר.</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="text-xl font-bold mb-4">נקודות מפתח</h3>
+                                <ul class="text-right list-disc pr-4 space-y-2">
+                                    <li>בניית מפת דרכים טכנולוגית</li>
+                                    <li>ניהול תקציבי IT</li>
+                                    <li>ליווי פרויקטי טרנספורמציה</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-hover bg-white p-8 rounded-xl shadow-lg transition-all duration-300 text-right animate-on-scroll" style="transition-delay: 150ms;">
-                        <div class="text-4xl turquoise-text mb-4">🔒</div>
-                        <h3 class="text-2xl font-bold navy-text mb-2">אבטחת מידע וסייבר</h3>
-                        <p class="text-gray-600 mb-4">הגנה מקיפה על הנכסים הדיגיטליים של הארגון שלכם מפני איומים מתקדמים.</p>
-                        <a href="service-security.html" class="font-bold turquoise-text hover:underline">קראו עוד ←</a>
+                    <div class="flip-card animate-on-scroll" style="transition-delay: 150ms;">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white text-right">
+                                <div class="text-4xl turquoise-text mb-4">🔒</div>
+                                <h3 class="text-2xl font-bold navy-text mb-2">אבטחת מידע וסייבר</h3>
+                                <p class="text-gray-600">הגנה מקיפה על הנכסים הדיגיטליים של הארגון שלכם מפני איומים.</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="text-xl font-bold mb-4">נקודות מפתח</h3>
+                                <ul class="text-right list-disc pr-4 space-y-2">
+                                    <li>מבחני חדירות (PT)</li>
+                                    <li>ניהול סיכונים</li>
+                                    <li>תגובה לאירועים (IR)</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-hover bg-white p-8 rounded-xl shadow-lg transition-all duration-300 text-right animate-on-scroll" style="transition-delay: 300ms;">
-                        <div class="text-4xl turquoise-text mb-4">🤖</div>
-                        <h3 class="text-2xl font-bold navy-text mb-2">פיתוח אוטומציות ופתרונות AI</h3>
-                        <p class="text-gray-600 mb-4">ממכנים תהליכים ידניים באמצעות אוטומציה ו-AI, לחיסכון בזמן ושיפור היעילות.</p>
-                        <a href="service-automation-ai.html" class="font-bold turquoise-text hover:underline">קראו עוד ←</a>
+                    <div class="flip-card animate-on-scroll" style="transition-delay: 300ms;">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white text-right">
+                                <div class="text-4xl turquoise-text mb-4">🤖</div>
+                                <h3 class="text-2xl font-bold navy-text mb-2">אוטומציה ופתרונות AI</h3>
+                                <p class="text-gray-600">חיסכון בזמן ושיפור היעילות באמצעות טכנולוגיות מתקדמות.</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3 class="text-xl font-bold mb-4">נקודות מפתח</h3>
+                                <ul class="text-right list-disc pr-4 space-y-2">
+                                    <li>מיכון תהליכי RPA</li>
+                                    <li>הטמעת מודלי Machine Learning</li>
+                                    <li>שיפור יעילות תפעולית</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Other sections remain the same -->
-        <section class="py-16 md:py-24 bg-white">
+        <!-- About Section -->
+        <section id="about" class="py-16 md:py-24 bg-white">
             <div class="container mx-auto px-6">
                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="text-center md:text-right animate-on-scroll">
-                        <h2 class="text-3xl md:text-4xl font-bold navy-text mb-6">היתרון שלנו: חדשנות, מומחיות ושותפות אמיתית</h2>
-                        <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                            אנחנו לא רק ספקי שירות, אנחנו השותפים הטכנולוגיים שלכם להצלחה. אנו משלבים ניסיון רב-שנים עם גישה פרואקטיבית כדי להבטיח שהטכנולוגיה תשרת את המטרות העסקיות שלכם באופן המיטבי.
+                    <div class="order-2 md:order-1 animate-on-scroll">
+                        <h2 class="text-3xl md:text-4xl font-bold navy-text mb-6">הסיפור שלנו</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                            SHARON360 הוקמה מתוך תשוקה אמיתית לטכנולוגיה ומתוך הבנה עמוקה של הפער הקיים בין הפוטנציאל הטכנולוגי לבין היישום שלו בעולם העסקי. החזון שלנו הוא לשמש כגשר, כשותפים אסטרטגיים שמסייעים לארגונים למצות את המיטב מהכלים הדיגיטליים העומדים לרשותם, ולהפוך טכנולוגיה למנוע צמיחה אמיתי.
                         </p>
-                        <div class="space-y-6 text-right">
-                            <div class="flex items-start">
-                                <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full turquoise-bg text-white mr-4 rtl:ml-4 rtl:mr-0">✓</div>
-                                <div>
-                                    <h4 class="font-bold text-lg navy-text">מעל 20 שנות ניסיון מצטבר</h4>
-                                    <p class="text-gray-600">הצוות שלנו מורכב ממומחים ותיקים בתחומם.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full turquoise-bg text-white mr-4 rtl:ml-4 rtl:mr-0">✓</div>
-                                <div>
-                                    <h4 class="font-bold text-lg navy-text">פתרונות מותאמים אישית</h4>
-                                    <p class="text-gray-600">אנחנו לא מאמינים בפתרונות "מהמדף". כל פתרון נתפר למידותיכם.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="p-8 animate-on-scroll" style="transition-delay: 150ms;">
-                        <div class="bg-light-gray-bg rounded-2xl w-full h-96 flex items-center justify-center">
-                            <span class="text-gray-400 text-2xl">איור מופשט</span>
+                    <div class="order-1 md:order-2 animate-on-scroll" style="transition-delay: 150ms;">
+                        <div class="bg-gray-200 rounded-2xl w-full h-80 flex items-center justify-center shadow-lg">
+                            <span class="text-gray-500 text-2xl">תמונת צוות / משרד</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-16 md:py-24 navy-bg text-white animate-on-scroll">
-            <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-12">לקוחות מספרים</h2>
-                <div id="testimonial-container" class="relative max-w-3xl mx-auto">
-                    <div class="testimonial-slide active">
-                        <p class="text-2xl italic mb-6">"הליווי האסטרטגי שקיבלנו היה לא פחות ממצוין. הם עזרו לנו למפות את הצרכים ולהוביל פרויקט מורכב בהצלחה מסחררת."</p>
-                        <div class="font-bold text-lg">יוסי כהן, מנכ"ל TechCorp</div>
-                    </div>
-                    <div class="testimonial-slide">
-                        <p class="text-2xl italic mb-6">"צוות מקצועי, זמין ושירותי. תמיד מרגישים שיש על מי לסמוך, במיוחד בנושאי אבטחת מידע קריטיים."</p>
-                        <div class="font-bold text-lg">מיכל לוי, סמנכ"לית תפעול, FinGlobal</div>
-                    </div>
-                    <div class="testimonial-slide">
-                        <p class="text-2xl italic mb-6">"הם הפכו את תשתית הענן שלנו ליעילה וחסכונית יותר. ממליצים בחום!"</p>
-                        <div class="font-bold text-lg">דוד שוורץ, CTO, Innovate Ltd</div>
-                    </div>
-                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 flex space-x-3 rtl:space-x-reverse">
-                        <button id="prev-testimonial" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition">←</button>
-                        <button id="next-testimonial" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center transition">→</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-16 md:py-24 light-gray-bg">
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 light-gray-bg">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold navy-text mb-12 text-center animate-on-scroll">הישארו מעודכנים: תובנות וחדשנות מעולם ה-IT</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 animate-on-scroll">
-                        <div class="h-48 bg-gray-300 flex items-center justify-center"><span class="text-gray-500">תמונת מאמר</span></div>
-                        <div class="p-6 text-right">
-                            <p class="text-sm turquoise-text font-semibold mb-2">אבטחת מידע</p>
-                            <h3 class="text-xl font-bold navy-text mb-3">5 הדרכים להגן על הארגון שלכם מפני מתקפות כופר</h3>
-                            <a href="#" class="font-bold turquoise-text hover:underline">קראו את המאמר</a>
+                <div class="text-center mb-12 animate-on-scroll">
+                    <h2 class="text-3xl md:text-4xl font-bold navy-text">בואו נדבר.</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">נשמח לשמוע מכם ולבחון יחד כיצד נוכל לקדם את הארגון שלכם. השאירו פרטים ונחזור אליכם בהקדם.</p>
+                </div>
+                <div class="grid md:grid-cols-5 gap-12">
+                    <div class="md:col-span-3 bg-white p-8 md:p-12 rounded-2xl shadow-lg animate-on-scroll">
+                        <form id="contact-form">
+                            <div class="grid sm:grid-cols-2 gap-x-6">
+                                <div class="form-group sm:col-span-1">
+                                    <input type="text" id="full-name" name="full-name" class="form-input" placeholder=" " required>
+                                    <label for="full-name" class="form-label">שם מלא</label>
+                                </div>
+                                <div class="form-group sm:col-span-1">
+                                    <input type="text" id="company-name" name="company-name" class="form-input" placeholder=" " required>
+                                    <label for="company-name" class="form-label">שם חברה</label>
+                                </div>
+                                <div class="form-group sm:col-span-1">
+                                    <input type="email" id="email" name="email" class="form-input" placeholder=" " required>
+                                    <label for="email" class="form-label">כתובת מייל</label>
+                                </div>
+                                <div class="form-group sm:col-span-1">
+                                    <input type="tel" id="phone" name="phone" class="form-input" placeholder=" " required>
+                                    <label for="phone" class="form-label">טלפון נייד</label>
+                                </div>
+                                <div class="form-group sm:col-span-2">
+                                    <textarea id="message" name="message" rows="5" class="form-input" placeholder=" " required></textarea>
+                                    <label for="message" class="form-label">איך נוכל לעזור?</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full mt-4 px-8 py-4 turquoise-bg text-white font-bold text-lg rounded-lg shadow-md hover:bg-opacity-90 transition-transform transform hover:scale-105">
+                                שליחה
+                            </button>
+                        </form>
+                         <div id="success-message" class="hidden text-center py-10">
+                             <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-green-100 text-green-500 text-4xl">✓</div>
+                            <h3 class="text-2xl font-bold navy-text mb-2">תודה! פנייתכם התקבלה.</h3>
+                            <p class="text-gray-600">נחזור אליכם בהקדם האפשרי.</p>
                         </div>
                     </div>
-                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 animate-on-scroll" style="transition-delay: 150ms;">
-                        <div class="h-48 bg-gray-300 flex items-center justify-center"><span class="text-gray-500">תמונת מאמר</span></div>
-                        <div class="p-6 text-right">
-                            <p class="text-sm turquoise-text font-semibold mb-2">ענן</p>
-                            <h3 class="text-xl font-bold navy-text mb-3">Multi-Cloud: האם זה הפתרון הנכון עבורכם?</h3>
-                            <a href="#" class="font-bold turquoise-text hover:underline">קראו את המאמר</a>
-                        </div>
-                    </div>
-                    <div class="card-hover bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 animate-on-scroll" style="transition-delay: 300ms;">
-                        <div class="h-48 bg-gray-300 flex items-center justify-center"><span class="text-gray-500">תמונת מאמר</span></div>
-                        <div class="p-6 text-right">
-                            <p class="text-sm turquoise-text font-semibold mb-2">מנהיגות טכנולוגית</p>
-                            <h3 class="text-xl font-bold navy-text mb-3">תפקיד ה-CIO בעידן ה-AI: אתגרים והזדמנויות</h3>
-                            <a href="#" class="font-bold turquoise-text hover:underline">קראו את המאמר</a>
+                    <div class="md:col-span-2 navy-bg text-white p-8 md:p-12 rounded-2xl shadow-lg animate-on-scroll" style="transition-delay: 150ms;">
+                        <h3 class="text-3xl font-bold mb-8">דרכים נוספות ליצירת קשר</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full bg-white/10 text-2xl turquoise-text">✉️</div>
+                                <div class="mr-4 rtl:mr-0 rtl:ml-4">
+                                    <p class="text-gray-300">מייל</p>
+                                    <a href="mailto:contact@sharon360.com" class="text-lg font-semibold hover:text-turquoise-bg transition">contact@sharon360.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-full bg-white/10 text-2xl turquoise-text">📞</div>
+                                <div class="mr-4 rtl:mr-0 rtl:ml-4">
+                                    <p class="text-gray-300">טלפון</p>
+                                    <a href="tel:050-000-0000" class="text-lg font-semibold hover:text-turquoise-bg transition">050-000-0000</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="py-20 navy-bg text-white text-center bg-gradient-to-br from-navy-bg to-slate-800">
-            <div class="container mx-auto px-6 animate-on-scroll">
-                <h2 class="text-3xl md:text-4xl font-bold">מוכנים לקדם את העסק שלכם?</h2>
-                <p class="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">צרו קשר עוד היום וקבלו ייעוץ מותאם אישית, ללא התחייבות.</p>
-                <a href="contact.html" class="inline-block mt-8 px-10 py-4 turquoise-bg text-white font-bold text-lg rounded-lg shadow-lg hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300">
-                    בואו נדבר
-                </a>
             </div>
         </section>
     </main>
@@ -280,12 +325,12 @@
                     <p class="text-gray-400">השותפים שלכם לביטחון וצמיחה דיגיטלית.</p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">קישורים מהירים</h4>
+                    <h4 class="font-bold text-lg mb-4">ניווט</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="about.html" class="hover:text-turquoise-bg transition">אודות</a></li>
-                        <li><a href="services.html" class="hover:text-turquoise-bg transition">שירותים</a></li>
-                        <li><a href="solutions.html" class="hover:text-turquoise-bg transition">פתרונות</a></li>
-                        <li><a href="knowledge-hub.html" class="hover:text-turquoise-bg transition">מגזין</a></li>
+                        <li><a href="#home" class="hover:text-turquoise-bg transition">בית</a></li>
+                        <li><a href="#services" class="hover:text-turquoise-bg transition">שירותים</a></li>
+                        <li><a href="#about" class="hover:text-turquoise-bg transition">אודות</a></li>
+                        <li><a href="#contact" class="hover:text-turquoise-bg transition">צרו קשר</a></li>
                     </ul>
                 </div>
                 <div>
@@ -385,6 +430,48 @@
             elementsToAnimate.forEach(el => {
                 observer.observe(el);
             });
+            
+            // Cookie Consent Banner
+            const cookieBanner = document.getElementById('cookie-consent-banner');
+            const acceptCookiesButton = document.getElementById('accept-cookies');
+
+            if (cookieBanner && !localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => {
+                    cookieBanner.classList.remove('hidden');
+                    cookieBanner.classList.add('show');
+                }, 1000);
+            }
+
+            if(acceptCookiesButton) {
+                acceptCookiesButton.addEventListener('click', () => {
+                    localStorage.setItem('cookiesAccepted', 'true');
+                    cookieBanner.classList.remove('show');
+                    setTimeout(() => {
+                         cookieBanner.classList.add('hidden');
+                    }, 500);
+                });
+            }
+
+            // Contact Form Logic
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('success-message');
+
+            if(contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(contactForm);
+                    const data = Object.fromEntries(formData.entries());
+                    console.log('Form Data Submitted:', data);
+                    
+                    // In a real application, you would send this data to a server.
+                    // For this demo, we'll just show a success message.
+                    contactForm.reset();
+                    contactForm.style.display = 'none';
+                    if(successMessage) {
+                        successMessage.classList.remove('hidden');
+                    }
+                });
+            }
         });
     </script>
 
